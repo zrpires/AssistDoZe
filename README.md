@@ -1,4 +1,4 @@
-# Dia.IA — Mais clareza para o seu dia.
+# AssistDoZé.IA — Mais clareza para o seu dia.
 
 Organize suas tarefas, acompanhe gastos e encontre um caminho para os problemas da rotina.
 
@@ -65,7 +65,3 @@ Os testes usam banco temporário e não exigem chave de IA. O GitHub Actions exe
 - `static/`: interface HTML, CSS e JavaScript sem etapa de build.
 - `project.json`: identidade e configuração da aplicação.
 - `tests/`: testes de regras de negócio, API e isolamento de dados.
-
-## Próximos passos para produção
-
-Adicionar autenticação e usuários, monitoramento, testes de navegador e implantação com HTTPS. Integrar serviços externos somente com autorização e confirmação das ações.
