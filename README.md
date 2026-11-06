@@ -7,8 +7,8 @@ MVP funcional independente, com interface em português, servidor Python e SQLit
 ## Executar
 
 ```bash
-git clone https://github.com/zrpires/assistente-pessoal-ia.git
-cd assistente-pessoal-ia
+git clone https://github.com/zrpires/assistdoze.git
+cd assistdoze
 python3 server.py
 ```
 
