@@ -1,1 +1,105 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Organize suas tarefas, acompanhe gastos e encontre um caminho para os problemas da rotina."><title>Dia.IA — Mais clareza para o seu dia.</title><link rel="stylesheet" href="/style.css"><script defer src="/app.js"></script></head><body><header><div class="brand">Dia.IA</div><span id="mode" class="badge">Conectando…</span></header><main><div class="eyebrow">Inteligência para a vida real</div><h1>Mais clareza para o seu dia.</h1><p>Organize suas tarefas, acompanhe gastos e encontre um caminho para os problemas da rotina.</p><div class="stats"><div class="stat"><strong id="pending">0</strong>Tarefas pendentes</div><div class="stat"><strong id="spent">R$ 0,00</strong>Gastos registrados</div></div><div class="layout"><div><section class="card"><h2>Próximos passos</h2><form id="task-form"><label for="title">O que precisa ser feito?</label><input id="title" required maxlength="200" placeholder="Ex.: agendar revisão do carro"><label for="due">Prazo opcional</label><input id="due" type="date"><button>Adicionar tarefa +</button></form><div id="tasks"></div></section><section class="card"><h2>Gastos do dia a dia</h2><form id="expense-form"><label for="expense-title">Descrição</label><input id="expense-title" required maxlength="200" placeholder="Ex.: supermercado"><label for="amount">Valor em reais</label><input id="amount" type="number" min="0.01" max="1000000" step="0.01" required><button>Registrar gasto +</button></form><div id="expenses"></div></section></div><aside><section class="card"><h2>Seu assistente</h2><p class="muted">A IA orienta; as ações são realizadas por você no painel.</p><div id="messages" class="messages" role="log" aria-live="polite"><div class="bubble">Olá! Qual problema você quer resolver hoje?</div></div><form id="chat-form"><label for="message">Sua mensagem</label><textarea id="message" maxlength="2000" required placeholder="Preciso organizar minha semana…"></textarea><button id="send">Enviar mensagem ↗</button></form></section></aside></div></main><div id="notice" class="notice hidden" role="status"></div><footer>Dia.IA · Versão inicial para uso local · Seus dados ficam no SQLite deste computador.</footer></body></html>
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="Organize suas tarefas, acompanhe gastos e encontre um caminho para os problemas da rotina."
+    />
+    <title>Dia.IA — Mais clareza para o seu dia.</title>
+    <link rel="stylesheet" href="style.css" />
+    <script
+      defer
+      src="app.js
+"
+    ></script>
+  </head>
+  <body>
+    <header>
+      <div class="brand">Dia.IA</div>
+      <span id="mode" class="badge">Conectando…</span>
+    </header>
+    <main>
+      <div class="eyebrow">Inteligência para a vida real</div>
+      <h1>Mais clareza para o seu dia.</h1>
+      <p>
+        Organize suas tarefas, acompanhe gastos e encontre um caminho para os
+        problemas da rotina.
+      </p>
+      <div class="stats">
+        <div class="stat"><strong id="pending">0</strong>Tarefas pendentes</div>
+        <div class="stat">
+          <strong id="spent">R$ 0,00</strong>Gastos registrados
+        </div>
+      </div>
+      <div class="layout">
+        <div>
+          <section class="card">
+            <h2>Próximos passos</h2>
+            <form id="task-form">
+              <label for="title">O que precisa ser feito?</label
+              ><input
+                id="title"
+                required
+                maxlength="200"
+                placeholder="Ex.: agendar revisão do carro"
+              /><label for="due">Prazo opcional</label
+              ><input id="due" type="date" /><button>Adicionar tarefa +</button>
+            </form>
+            <div id="tasks"></div>
+          </section>
+          <section class="card">
+            <h2>Gastos do dia a dia</h2>
+            <form id="expense-form">
+              <label for="expense-title">Descrição</label
+              ><input
+                id="expense-title"
+                required
+                maxlength="200"
+                placeholder="Ex.: supermercado"
+              /><label for="amount">Valor em reais</label
+              ><input
+                id="amount"
+                type="number"
+                min="0.01"
+                max="1000000"
+                step="0.01"
+                required
+              /><button>Registrar gasto +</button>
+            </form>
+            <div id="expenses"></div>
+          </section>
+        </div>
+        <aside>
+          <section class="card">
+            <h2>Seu assistente</h2>
+            <p class="muted">
+              A IA orienta; as ações são realizadas por você no painel.
+            </p>
+            <div id="messages" class="messages" role="log" aria-live="polite">
+              <div class="bubble">
+                Olá! Qual problema você quer resolver hoje?
+              </div>
+            </div>
+            <form id="chat-form">
+              <label for="message">Sua mensagem</label
+              ><textarea
+                id="message"
+                maxlength="2000"
+                required
+                placeholder="Preciso organizar minha semana…"
+              ></textarea
+              ><button id="send">Enviar mensagem ↗</button>
+            </form>
+          </section>
+        </aside>
+      </div>
+    </main>
+    <div id="notice" class="notice hidden" role="status"></div>
+    <footer>
+      Dia.IA · Versão inicial para uso local · Seus dados ficam no SQLite deste
+      computador.
+    </footer>
+  </body>
+</html>
