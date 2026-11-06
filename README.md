@@ -1,67 +1,74 @@
-# AssistDoZé.IA — Mais clareza para o seu dia.
+# AssistDoZe
 
-Organize suas tarefas, acompanhe gastos e encontre um caminho para os problemas da rotina.
+Aplicativo web independente pronto para importação na Vercel. Interface em português, arquivos estáticos em `public/` e funções Node.js em `api/`. Não usa Python, SQLite ou disco persistente no servidor.
 
-MVP funcional independente, com interface em português, servidor Python e SQLite. Sem dependências Python externas. Requer Python 3.11+ e navegador atualizado.
+## Publicar na Vercel
 
-## Executar
+1. Abra [New Project](https://vercel.com/new) e importe `zrpires/AssistDoZe`.
+2. **Root Directory:** raiz do repositório. **Framework Preset:** Other. **Node.js:** 22.x.
+3. Mantenha **Build Command desativado/vazio**. **Output Directory:** `public` (já definido em `vercel.json`). Instalação: `npm ci` (ou padrão da Vercel).
+4. Clique em Deploy. O aplicativo já abre e suas funções locais ficam utilizáveis, sem chave de IA.
+5. Para IA generativa, configure as variáveis abaixo em Settings → Environment Variables e faça **Redeploy**. Configure separadamente em Production e Preview se usar ambos.
 
-```bash
-git clone https://github.com/zrpires/assistdoze.git
-cd assistdoze
-python3 server.py
-```
-
-Abra http://localhost:8000. No Windows, use `python` se necessário. Para executar os três simultaneamente, use portas diferentes: `PORT=8001 python3 server.py` (Linux/macOS) ou `$env:PORT="8001"; python server.py` (PowerShell).
+Não há etapa de build ou servidor que precise permanecer rodando. As rotas `/api/*` usam Vercel Functions. Não faça upload apenas da pasta `public`: importe o repositório inteiro para incluir as funções.
 
 ## Funcionalidades
 
-- Cadastro, conclusão, reabertura e exclusão de tarefas com prazo opcional.
-- Registro e exclusão de gastos, com totais em reais.
-- Assistente com contexto das tarefas e despesas atuais.
+- Tarefas com prazo, conclusão, reabertura, exclusão e filtros.
+- Despesas em reais com cálculo inteiro em centavos e validação.
+- Backup JSON exportável/importável e rejeição de arquivos inválidos.
+- Orientação com o contexto das tarefas pendentes e despesas, com opção de não compartilhar.
 
-## Ativar a IA real
+## IA generativa opcional
 
-Sem chave, o aplicativo identifica o **modo demonstrativo** e fornece respostas fixas, sem consulta a um modelo. Para respostas personalizadas, configure uma chave da API OpenAI, com saldo e acesso ao modelo. A chave fica somente no servidor.
+| Variável | Uso |
+| --- | --- |
+| `OPENAI_API_KEY` | Sua chave OpenAI com saldo/acesso à API |
+| `OPENAI_MODEL` | Modelo disponível na sua conta; padrão `gpt-4.1-mini` |
+| `APP_PASSWORD` | Senha forte para liberar chamadas pagas de IA |
 
-Linux/macOS:
+**Sem chave:** a interface mostra “Assistente local · sem IA generativa” e responde por regras locais. Não finge ser um modelo. **Com chave:** `APP_PASSWORD` é obrigatório para evitar expor uma API paga sem controle de acesso. Digite essa senha na seção “Acesso à IA” do aplicativo; ela fica em `sessionStorage` nesta aba. Não a publique no código, não use prefixo `NEXT_PUBLIC_` e não compartilhe uma senha pessoal reutilizada. Se alguém já souber a senha, poderá usar sua API; troque a variável e faça Redeploy para revogar o acesso. Para uso público em escala, implemente contas e limites de consumo por usuário. A senha protege o uso pago da IA; não é um sistema de usuários ou proteção dos arquivos públicos.
 
-```bash
-read -s -p "Chave OpenAI: " OPENAI_API_KEY; echo
-export OPENAI_API_KEY
-export OPENAI_MODEL=gpt-4.1-mini
-python3 server.py
-```
+A chave OpenAI nunca vai para o navegador. As chamadas podem gerar custos. Configure limites de gasto na conta OpenAI. O provedor aplica suas próprias políticas de dados. Erros de saldo, chave, conexão e modelo aparecem na tela sem revelar segredos.
 
-PowerShell:
+## Persistência e privacidade
 
-```powershell
-$secret = Read-Host "Chave OpenAI" -AsSecureString
-$env:OPENAI_API_KEY = [System.Net.NetworkCredential]::new('', $secret).Password
-$env:OPENAI_MODEL = "gpt-4.1-mini"
-python server.py
-```
+Os dados são armazenados em `localStorage`, separados por navegador, perfil e domínio. Não há cadastro, conta de usuário, sincronização entre dispositivos ou banco compartilhado. Isso evita que uma instalação pública revele suas tarefas a outros visitantes. Alterar domínio, limpar o navegador ou usar navegação privada pode remover/inacessibilizar os registros. Use **Exportar backup JSON** regularmente e importe-o no novo domínio quando necessário.
 
-`.env.example` documenta a configuração; arquivos `.env` não são carregados automaticamente. Nunca faça commit da chave. Chamadas à API podem gerar custos. O chat envia sua mensagem e o contexto atual do aplicativo à OpenAI; não envie dados sensíveis. Cada mensagem é independente, sem memória de conversas anteriores.
+O armazenamento é validado antes de salvar. Se houver dados corrompidos, a interface impede sobrescrever silenciosamente e permite exportar o conteúdo bruto. Limite: 2000 tarefas e 2000 despesas. Despesas registradas representam o total informado, sem conexão bancária. A conversa não altera tarefas ou despesas automaticamente; use os formulários.
 
-## Dados e limites
+Com IA ativada e a opção de contexto marcada, até 60 tarefas pendentes (ordenadas por prazo), as 60 despesas mais recentes, sua mensagem e até oito mensagens de histórico são enviadas à OpenAI. Desmarque a opção para não enviar o painel. Não envie dados sensíveis.
 
-O servidor escuta apenas em `127.0.0.1`. Esta versão é para uso local, individual, sem autenticação. Não a exponha à internet sem implementar autenticação, HTTPS, limites de requisições e política de privacidade. SQLite é criado automaticamente em `data.sqlite3`; faça backup para conservar os dados. O arquivo é ignorado pelo Git. Use `DATABASE_PATH` para outro caminho. A interface funciona sem fontes externas; fontes do Google são opcionais.
+## Executar no computador
 
-Não há integração com calendário, e-mail ou notificações em segundo plano. O assistente orienta, sem executar ações fora do aplicativo.
-
-## Testar
+Requer **Node.js 22.x** e npm. Sem dependências externas em runtime.
 
 ```bash
-python3 -m unittest discover -s tests -v
-node --check static/app.js
+git clone https://github.com/zrpires/AssistDoZe.git
+cd AssistDoZe
+npm ci
+cp .env.example .env
+npm run dev
 ```
 
-Os testes usam banco temporário e não exigem chave de IA. O GitHub Actions executa os mesmos testes a cada push e pull request.
+Abra http://localhost:3000. No Windows, copie `.env.example` para `.env` pelo Explorer ou `Copy-Item .env.example .env` no PowerShell. Edite `.env` para configurar serviços opcionais. Nunca faça commit dele. Para rodar mais de um projeto, use `PORT` diferente em cada `.env`.
+
+## Verificação
+
+```bash
+npm run check
+npm test
+```
+
+Testes de rotas HTTP, validação, modo local, autenticação, falhas de provedores e integração simulada com OpenAI, além de backup e valores monetários. O GitHub Actions executa os testes a cada push/pull request. Testes simulados não substituem uma compra de teste na sua conta nem o teste do microfone no seu dispositivo.
 
 ## Estrutura
 
-- `server.py`: API HTTP, persistência e integração OpenAI via biblioteca padrão.
-- `static/`: interface HTML, CSS e JavaScript sem etapa de build.
-- `project.json`: identidade e configuração da aplicação.
-- `tests/`: testes de regras de negócio, API e isolamento de dados.
+- `public/`: interface e estado do navegador.
+- `api/`: funções serverless.
+- `lib/`: regras, segurança e integração com serviços.
+- `dev.mjs`: servidor apenas para desenvolvimento local.
+- `vercel.json`: configuração de deploy e cabeçalhos de segurança.
+- `.env.example`: variáveis disponíveis, sem credenciais.
+
+As respostas de API usam `no-store`. Requisições de outra origem são recusadas, entradas e tamanhos são validados e as saídas da interface usam texto seguro. O deploy final, chaves reais, compatibilidade de voz e operação comercial precisam ser validados no seu domínio e nas suas contas.
